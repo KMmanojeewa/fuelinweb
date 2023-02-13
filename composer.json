@@ -36,6 +36,11 @@
             "silverstripe/vendor-plugin": true
         }
     },
+    "autoload": {
+        "psr-4": {
+            "FuelIn\\": "app/src/"
+        }
+    },
     "prefer-stable": true,
     "minimum-stability": "dev"
 }
