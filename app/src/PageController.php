@@ -3,6 +3,7 @@
 namespace {
 
     use SilverStripe\CMS\Controllers\ContentController;
+    use SilverStripe\Control\HTTPResponse;
 
     class PageController extends ContentController
     {
@@ -29,5 +30,26 @@ namespace {
             // You can include any CSS or JS required by your project here.
             // See: https://docs.silverstripe.org/en/developer_guides/templates/requirements/
         }
+
+        public function jsonResponse($json) : HTTPResponse
+        {
+            if (is_array($json)) {
+                $json = json_encode($json);
+            }
+            $response = new HTTPResponse();
+            $response->setBody($json);
+            $response->addHeader('Content-type', 'application/json');
+            return $response;
+        }
+
+        public function getPayloadData()
+        {
+            $json = $this->getRequest()->getBody();
+            if ($json) {
+                return json_decode($json, true);
+            }
+            return null;
+        }
+
     }
 }

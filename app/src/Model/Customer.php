@@ -10,6 +10,7 @@ class Customer extends DataObject
 
     private static $db = [
         'Name' => 'Varchar',
+        'NIC' => 'Varchar',
         'Email' => 'Varchar',
         'Phone' => 'Varchar',
         'Address' => 'Varchar',
@@ -19,4 +20,15 @@ class Customer extends DataObject
     private static $has_many = [
         'Vehicles' => Vehicle::class
     ];
+
+    public function toJSONData()
+    {
+        $data = [];
+        $data['id'] = $this->ID;
+        $data['name'] = $this->Name;
+        $data['email'] = $this->Email;
+        $data['phone'] = $this->Phone;
+        $data['address'] = $this->Address;
+        return $data;
+    }
 }

@@ -1,0 +1,8 @@
+---
+Name: routes
+---
+SilverStripe\Control\Director:
+  rules:
+    'login': FuelIn\Controller\LoginController
+    'fuel': FuelIn\Controller\FuelController
+    'customer': FuelIn\Controller\CustomerController

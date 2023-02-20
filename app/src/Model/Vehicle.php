@@ -16,6 +16,17 @@ class Vehicle extends DataObject
     ];
 
     private static $has_one = [
-        'VehicleType' => VehicleType::class
+        'VehicleType' => VehicleType::class,
+        'Customer' => Customer::class
     ];
+
+    public function toJSONData()
+    {
+        $data = [];
+        $data['id'] = $this->ID;
+        $data['vehicle_number'] = $this->VehicleNumber;
+        $data['fuel_type'] = $this->FuelType;
+        $data['vehicle_type'] = $this->VehicleType()->Name;
+        return $data;
+    }
 }
