@@ -11,6 +11,7 @@ class Customer extends DataObject
     private static $db = [
         'Name' => 'Varchar',
         'Email' => 'Varchar',
+        'NIC' => 'Varchar',
         'Phone' => 'Varchar',
         'Address' => 'Varchar',
         'Password' => 'Varchar',
