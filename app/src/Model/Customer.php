@@ -12,6 +12,7 @@ class Customer extends DataObject
         'Name' => 'Varchar',
         'NIC' => 'Varchar',
         'Email' => 'Varchar',
+        'NIC' => 'Varchar',
         'Phone' => 'Varchar',
         'Address' => 'Varchar',
         'Password' => 'Varchar',
