@@ -11,7 +11,6 @@ class LoginController extends \PageController
     private static $allowed_actions = [
         'login',
         'register',
-        'makeFuelOrder'
     ];
 
 
