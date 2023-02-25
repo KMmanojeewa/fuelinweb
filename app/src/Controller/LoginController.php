@@ -13,8 +13,6 @@ class LoginController extends \PageController
         'register',
     ];
 
-
-
     public function register()
     {
         $data = $this->getPayloadData();
@@ -99,5 +97,5 @@ class LoginController extends \PageController
         return $this->jsonResponse($ret);
     }
 
- 
+
 }
