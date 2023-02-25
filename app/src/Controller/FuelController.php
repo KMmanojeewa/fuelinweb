@@ -14,6 +14,7 @@ class FuelController extends \PageController
 {
     private static $allowed_actions = [
         'getVehicles',
+        'makeFuelOrder',
     ];
 
     public function getVehicles()
@@ -123,6 +124,28 @@ class FuelController extends \PageController
         return $this->jsonResponse($ret);
     }
 
-
+    public function makeFuelOrder()
+    {
+        $data = $this->getPayloadData();
+        $serviceCenterID = $data['center_id'];
+        $fuelType = $data['fuel_type']; $amount = $data['amount'];
+        $date = $data['date'];
+        $vehicle = FuelOrder::create([
+            'Amount'=> $amount,
+            'FuelType'=> $fuelType,
+            'Date'=> $date, 'Status'=> 'Draft',
+            'ServiceCenterID'=> $serviceCenterID,
+             ]);
+        $vehicle->write();
+        $orders = FuelOrder::get()->filter('ServiceCenterID', $serviceCenterID);
+        $arr = [];
+        foreach ($orders as $order) {
+            $arr[] = $order->toJSONData();
+         }
+         $ret['status'] = 0;
+         $ret['message'] = 'order placed successfully';
+         $ret['orders'] = $arr;
+          return $this->jsonResponse($ret);
+    }
 
 }
