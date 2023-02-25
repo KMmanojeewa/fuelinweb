@@ -130,9 +130,9 @@ class FuelController extends \PageController
         $serviceCenterID = $data['center_id'];
         $fuelType = $data['fuel_type']; $amount = $data['amount'];
         $date = $data['date'];
-        $vehicle = FuelOrder::create([ 
-            'Amount'=> $amount, 
-            'FuelType'=> $fuelType, 
+        $vehicle = FuelOrder::create([
+            'Amount'=> $amount,
+            'FuelType'=> $fuelType,
             'Date'=> $date, 'Status'=> 'Draft',
             'ServiceCenterID'=> $serviceCenterID,
              ]);
