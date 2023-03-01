@@ -8,12 +8,14 @@ use FuelIn\Model\FuelOrder;
 use FuelIn\Model\FuelRequest;
 use FuelIn\Model\Vehicle;
 use FuelIn\Model\VehicleType;
-use SilverStripe\ORM\FieldType\DBDatetime;
 
 class FuelController extends \PageController
 {
     private static $allowed_actions = [
         'getVehicles',
+        'addVehicle',
+        'fuelRequest',
+        'fuelRequestAvailability',
         'makeFuelOrder',
     ];
 
@@ -134,22 +136,68 @@ class FuelController extends \PageController
         $amount = $data['amount'];
         $date = $data['date'];
         $vehicle = FuelOrder::create([
-            'Amount'=> $amount,
-            'FuelType'=> $fuelType,
-            'Date'=> $date,
-            'Status'=> 'Draft',
-            'ServiceCenterID'=> $serviceCenterID,
-             ]);
+            'Amount' => $amount,
+            'FuelType' => $fuelType,
+            'Date' => $date,
+            'Status' => 'Draft',
+            'ServiceCenterID' => $serviceCenterID,
+        ]);
         $vehicle->write();
         $orders = FuelOrder::get()->filter('ServiceCenterID', $serviceCenterID);
         $arr = [];
         foreach ($orders as $order) {
             $arr[] = $order->toJSONData();
-         }
-         $ret['status'] = 0;
-         $ret['message'] = 'order placed successfully';
-         $ret['orders'] = $arr;
-          return $this->jsonResponse($ret);
+        }
+        $ret['status'] = 0;
+        $ret['message'] = 'order placed successfully';
+        $ret['orders'] = $arr;
+        return $this->jsonResponse($ret);
+
+    }
+
+    public function addVehicle()
+    {
+        $data = $this->getPayloadData();
+        $number = $data['number'];
+        $chassisNumber = $data['chassis'];
+        $type = $data['type'];
+        $fuel = $data['fuel'];
+        $cusID = $data['customer'];
+        $ret = [];
+        if($number && $chassisNumber && $type && $fuel) {
+            $vehicle = Vehicle::get()->filterAny([ 'VehicleNumber'=> $number, 'ChassisNumber'=> $chassisNumber ])->first();
+            if(!$vehicle) {
+                $vType = VehicleType::get()->filter('Name', $type)->first();
+                $cus = Customer::get()->filter('ID', $cusID)->first();
+
+                if($vType && $cus) {
+                    $vehicle = Vehicle::create([
+                        'VehicleNumber'=> $number,
+                        'ChassisNumber'=> $chassisNumber,
+                        'FuelType'=> $fuel,
+                        'VehicleTypeID'=> $vType->ID,
+                        'Customer'=> $cus->ID,
+                        ]);
+                    $vehicle->write();
+
+                    $status = 0;
+                    $message = 'successfully registered';
+
+                    $arr = [];
+                    foreach ($cus->Vehicles() as $veh) {
+                        $arr[] = $veh->toJSONData();
+                    } $vehicles = $arr;
+                }
+            } else {
+                $status = 1;
+                $message = 'These details already used';
+                $vehicles = [];
+            }
+            $ret['status'] = $status;
+            $ret['message'] = $message;
+            $ret['vehicles'] = $vehicles;
+        }
+        return $this->jsonResponse($ret);
     }
 
 }
