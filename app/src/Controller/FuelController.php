@@ -95,6 +95,8 @@ class FuelController extends \PageController
     {
         $data = $this->getPayloadData();
         $customerID = $data['customer_id'];
+        $vehicleID = $data['vehicle_id'];
+
         $orderID = $data['order_id'];
         $requestAmount = $data['amount'];
         $ret = [];
@@ -128,12 +130,14 @@ class FuelController extends \PageController
     {
         $data = $this->getPayloadData();
         $serviceCenterID = $data['center_id'];
-        $fuelType = $data['fuel_type']; $amount = $data['amount'];
+        $fuelType = $data['fuel_type'];
+        $amount = $data['amount'];
         $date = $data['date'];
         $vehicle = FuelOrder::create([
             'Amount'=> $amount,
             'FuelType'=> $fuelType,
-            'Date'=> $date, 'Status'=> 'Draft',
+            'Date'=> $date,
+            'Status'=> 'Draft',
             'ServiceCenterID'=> $serviceCenterID,
              ]);
         $vehicle->write();

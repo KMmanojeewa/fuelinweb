@@ -29,7 +29,7 @@ class LoginController extends \PageController
             $customer = Customer::get()->filterAny([
                 'NIC' => $nic,
                 'Email' => $email,
-                'Name' => $nic,
+                'Name' => $name,
             ])->first();
 
             if (!$customer) {

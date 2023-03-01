@@ -1,6 +1,7 @@
 <?php
 namespace FuelIn\Test;
 
+use FuelIn\Controller\FuelController;
 use FuelIn\Model\Customer;
 use SilverStripe\Dev\SapphireTest;
 
@@ -14,4 +15,6 @@ class FuelControllerTest extends SapphireTest
         $firstVehicle = $cus->Vehicles()->first();
         $this->assertEquals(1, $firstVehicle->ID);
     }
+
+
 }
