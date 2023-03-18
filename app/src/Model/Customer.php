@@ -21,6 +21,12 @@ class Customer extends DataObject
         'Vehicles' => Vehicle::class
     ];
 
+    private static $summary_fields = [
+        'ID',
+        'Name',
+        'Phone'
+    ];
+
     public function toJSONData()
     {
         $data = [];

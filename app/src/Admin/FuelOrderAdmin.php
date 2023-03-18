@@ -6,7 +6,7 @@ use SilverStripe\Admin\ModelAdmin;
 
 class FuelOrderAdmin extends ModelAdmin
 {
-    private static $menu_title = 'FuelOrders';
+    private static $menu_title = 'Fuel Orders';
 
     private static $url_segment = 'fuel-orders';
 

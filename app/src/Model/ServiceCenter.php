@@ -20,4 +20,10 @@ class ServiceCenter extends DataObject
     private static $has_many = [
         'FuelOrders' => FuelOrder::class
     ];
+
+    private static $summary_fields = [
+        'ID',
+        'Name',
+        'Location.Name'
+    ];
 }

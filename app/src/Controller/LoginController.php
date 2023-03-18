@@ -4,6 +4,7 @@ namespace FuelIn\Controller;
 
 
 use FuelIn\Model\Customer;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 
 class LoginController extends \PageController
@@ -13,9 +14,18 @@ class LoginController extends \PageController
         'register',
     ];
 
-    public function register()
+    public function getPayloadData($request)
     {
-        $data = $this->getPayloadData();
+        $json = $request->getBody();
+        if ($json) {
+            return json_decode($json, true);
+        }
+        return null;
+    }
+
+    public function register(HTTPRequest $request)
+    {
+        $data = $this->getPayloadData($request);
         $name = $data['name'];
         $nic = $data['nic'];
         $email = $data['email'];
@@ -29,7 +39,7 @@ class LoginController extends \PageController
             $customer = Customer::get()->filterAny([
                 'NIC' => $nic,
                 'Email' => $email,
-                'Name' => $name,
+//                'Name' => $name,
             ])->first();
 
             if (!$customer) {
@@ -43,7 +53,7 @@ class LoginController extends \PageController
                 ]);
                 $customer->write();
                 $status = 0;
-                $message = 'successfully created';
+                $message = 'successfully customer created';
                 $customer = [
                     'id' => $customer->ID,
                     'name' => $customer->Name,
@@ -63,9 +73,9 @@ class LoginController extends \PageController
         return $this->jsonResponse($ret);
     }
 
-    public function login()
+    public function login(HTTPRequest $request)
     {
-        $data = $this->getPayloadData();
+        $data = $this->getPayloadData($request);
         $email = $data['email'];
         $password = $data['password'];
         $ret = [];

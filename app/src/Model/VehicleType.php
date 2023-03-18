@@ -14,4 +14,10 @@ class VehicleType extends DataObject
         'Quota' => 'Varchar',
     ];
 
+    private static $summary_fields = [
+        'ID',
+        'Name',
+        'Quota'
+    ];
+
 }

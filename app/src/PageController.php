@@ -42,14 +42,14 @@ namespace {
             return $response;
         }
 
-        public function getPayloadData()
-        {
-            $json = $this->getRequest()->getBody();
-            if ($json) {
-                return json_decode($json, true);
-            }
-            return null;
-        }
+//        public function getPayloadData($request = null)
+//        {
+//            $json = $this->getRequest()->getBody();
+//            if ($json) {
+//                return json_decode($json, true);
+//            }
+//            return null;
+//        }
 
     }
 }

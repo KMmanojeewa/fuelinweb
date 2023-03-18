@@ -8,6 +8,7 @@ use FuelIn\Model\FuelOrder;
 use FuelIn\Model\FuelRequest;
 use FuelIn\Model\Vehicle;
 use FuelIn\Model\VehicleType;
+use SilverStripe\Control\HTTPRequest;
 
 class FuelController extends \PageController
 {
@@ -19,9 +20,18 @@ class FuelController extends \PageController
         'makeFuelOrder',
     ];
 
-    public function getVehicles()
+    public function getPayloadData($request)
     {
-        $data = $this->getPayloadData();
+        $json = $request->getBody();
+        if ($json) {
+            return json_decode($json, true);
+        }
+        return null;
+    }
+
+    public function getVehicles(HTTPRequest $request)
+    {
+        $data = $this->getPayloadData($request);
         $userid = $data['id'];
         $cus = Customer::get()->filter('ID', $userid)->first();
         $arr = [];
@@ -32,11 +42,11 @@ class FuelController extends \PageController
         return $this->jsonResponse($ret);
     }
 
-    public function fuelRequestAvailability()
+    public function fuelRequestAvailability(HTTPRequest $request)
     {
         //assume saterday and sunday not deliver fuel
 
-        $data = $this->getPayloadData();
+        $data = $this->getPayloadData($request);
         $customerID = $data['customer_id'];
         $serviceCenterID = $data['service_center_id'];
 
@@ -93,9 +103,9 @@ class FuelController extends \PageController
 
     }
 
-    public function fuelRequest()
+    public function fuelRequest(HTTPRequest $request)
     {
-        $data = $this->getPayloadData();
+        $data = $this->getPayloadData($request);
         $customerID = $data['customer_id'];
         $vehicleID = $data['vehicle_id'];
 
@@ -128,9 +138,10 @@ class FuelController extends \PageController
         return $this->jsonResponse($ret);
     }
 
-    public function makeFuelOrder()
+    public function makeFuelOrder(HTTPRequest $request)
     {
-        $data = $this->getPayloadData();
+        $data = $this->getPayloadData($request);
+//        echo '<pre>'.print_r($request,1);die();
         $serviceCenterID = $data['center_id'];
         $fuelType = $data['fuel_type'];
         $amount = $data['amount'];
@@ -138,7 +149,7 @@ class FuelController extends \PageController
         $vehicle = FuelOrder::create([
             'Amount' => $amount,
             'FuelType' => $fuelType,
-            'Date' => $date,
+            'OrderDate' => $date,
             'Status' => 'Draft',
             'ServiceCenterID' => $serviceCenterID,
         ]);
@@ -155,9 +166,9 @@ class FuelController extends \PageController
 
     }
 
-    public function addVehicle()
+    public function addVehicle(HTTPRequest $request)
     {
-        $data = $this->getPayloadData();
+        $data = $this->getPayloadData($request);
         $number = $data['number'];
         $chassisNumber = $data['chassis'];
         $type = $data['type'];
@@ -187,6 +198,10 @@ class FuelController extends \PageController
                     foreach ($cus->Vehicles() as $veh) {
                         $arr[] = $veh->toJSONData();
                     } $vehicles = $arr;
+                } else {
+                    $status = 1;
+                    $message = 'No vehicle type or customer found';
+                    $vehicles = [];
                 }
             } else {
                 $status = 1;

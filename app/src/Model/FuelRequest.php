@@ -18,6 +18,12 @@ class FuelRequest extends DataObject
         'Customer' => Customer::class,
     ];
 
+    private static $summary_fields = [
+        'ID',
+        'Amount',
+        'Date'
+    ];
+
     public function toJSONData()
     {
         $data = [];

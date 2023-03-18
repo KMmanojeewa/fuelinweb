@@ -29,13 +29,21 @@ class FuelOrder extends DataObject
         'FuelRequests' => FuelRequest::class
     ];
 
+    private static $summary_fields = [
+        'ID',
+        'Amount',
+        'OrderDate',
+        'ExpectedDeliveryDate',
+        'Status',
+    ];
+
     public function toJSONData()
     {
         $data = [];
         $data['id'] = $this->ID;
         $data['amount'] = $this->Amount;
         $data['fuel_type'] = $this->FuelType;
-        $data['date'] = $this->Date;
+        $data['date'] = $this->OrderDate;
         $data['status'] = $this->Status;
         return $data;
     }
